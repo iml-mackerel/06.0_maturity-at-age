@@ -21,7 +21,9 @@ dir.Rdata <- 'Rdata/'
 ##### source R directory  ################################################################################
 invisible(sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source))
 
-
 ##### my ggplot theme ################################################################################
 theme_set(theme_mackerel())             # theme_mackerel from catchR
+update_geom_defaults("line", list(size = 1))  # no idea why somethimes I get fat lines otherwise
 
+##### passwords databases #############################################################################
+source('passwords.R')

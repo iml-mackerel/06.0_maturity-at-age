@@ -15,7 +15,7 @@ output:
 
 ```{r markdown, echo=F}
 library(knitr)
-opts_chunk$set(echo = T, collapse = T, fig.align = "center", fig.width = 9, fig.height = 6)
+opts_chunk$set(echo = T, collapse = T, fig.align = "center", fig.width = 9, fig.height = 6,warning = FALSE, message = FALSE)
 options(width = 300)
 ```    
 
@@ -28,13 +28,15 @@ source('0.0_settings.R')
 ```{r read, message = F}
 new <- FALSE
 if(new){
-    bio <- get.bio(species='maquereau',user="pec_iml_ro",password="Pecimlro_1!")
-    save(bio,file=paste0('Rdata/bio_',Sys.Date(),'.Rdata'))
+    bio <- get.bio(species='maquereau',user=imlp.user,password=imlp.pass)
+    f <- paste0('Rdata/bio_',Sys.Date(),'.Rdata')
+    save(bio,file=f)
 }else{
     df <- file.info(list.files("Rdata/", full.names = T,pattern="bio_"))
-    load(rownames(df)[which.max(df$mtime)])
+    f <- rownames(df)[which.max(df$mtime)]
+    load(f)
 }
-
+print(f)
 maa.gear <- read.table(paste0(dir.dat,'maa_group_gear.txt'),header=T)
 maa.region <- read.table(paste0(dir.dat,'maa_group_region.txt'),header=T)
 ```
@@ -47,8 +49,8 @@ names(bio.mat)[c(6:7)] <- c('length','age')
 nrow(bio.mat)
 
 # what months?
-# bio.mat <- bio.mat[bio.mat$month %in% c(6:7),]   # was done before
-bio.mat <- bio.mat[bio.mat$month %in% c(5:11),]    # assuming maturity-at-age does not evolve over six months? increase number of immature fish in samples and reduces uncertainty. 
+bio.mat <- bio.mat[bio.mat$month %in% c(6:7),]   # was done before
+# bio.mat <- bio.mat[bio.mat$month %in% c(5:11),]    # less smooth results, depsite larger amount of data and small effect of month on maa
 
 # remove NAs
 bio.mat <- bio.mat[!is.na(bio.mat$matur) & !is.na(bio.mat$age) & !is.na(bio.mat$year),]
@@ -133,7 +135,7 @@ bio.mat <- bio.mat[bio.mat$year!=1973,]
 prop.mat <- prop.mat[prop.mat$year!=1973,]
 
 # run models
-mods <- lapply(unique(bio.mat$year), function(x) glm(mat~age,data=bio.mat[bio.mat$year==x,],family=binomial))
+mods <- lapply(unique(bio.mat$year), function(x) glm(mat~age,data=bio.mat[bio.mat$year==x,],family=binomial(logit))) # warning not a problem
 
 # predictions 
 df <- data.frame(age=seq(0,10,0.1))
@@ -147,7 +149,6 @@ preds <- bind_rows(preds,.id='year')
 maa <- preds[preds$age %in% 1:10,]
 rownames(maa) <- 1:nrow(maa)
 maa$fit <- round(maa$fit,2)
-
 
 # test:
 # mod <- glm(mat~age+as.factor(year)+as.factor(gear.group)+as.factor(region)+month,data=bio.mat,family=binomial) # though there are interactions
@@ -186,7 +187,7 @@ ggplot(maa,aes(x=as.numeric(year),y=fit))+
 ### maa ci
 ```{r plot maaci}
 ggplot(maa,aes(x=as.numeric(year),y=fit))+
-    geom_ribbon(aes(ymin=plow,ymax=pup,fill=as.factor(age)),alpha=0.5)+
+    geom_ribbon(aes(ymin=pmax(0,plow),ymax=pmin(1,pup),fill=as.factor(age)),alpha=0.5)+
     geom_point(aes(col=as.factor(age)))+
     geom_line(aes(col=as.factor(age)),size=1)+
     labs(x='Year',y='Proportion mature',col='Age')+
@@ -197,6 +198,7 @@ ggplot(maa,aes(x=as.numeric(year),y=fit))+
 # Sensitivity: age 0
 What if there were actually had observations of age 0 (not selected by fishery) that are immature?
 Conclusion: no significant difference.
+
 ```{r sens_padd0, message = F}
 # add age 0
 n <- 100 # number of new immature fish each year
@@ -223,18 +225,22 @@ p1 <- ggplot(maas,aes(x=as.numeric(year),y=fit))+
     geom_line(aes(col=as.factor(age)),size=1)+
     labs(x='Year',y='Proportion mature',col='Age',title='Base')+
     scale_color_viridis_d()+
-    theme(legend.position = 'none')
+    theme(legend.position = 'none')+
+    scale_y_continuous(limits = c(0,1.01),expand = c(0,0))
 p2 <- ggplot(maas,aes(x=as.numeric(year),y=fit))+
     geom_ribbon(aes(ymin=plow,ymax=pup,fill=as.factor(age)),alpha=0.5)+
     geom_point(aes(col=as.factor(age)))+
     geom_line(aes(col=as.factor(age)),size=1)+
     labs(x='Year',y='Proportion mature',col='Age',title='Padded with age 0')+
     scale_color_viridis_d()+
-    theme(legend.position = 'none')
+    theme(legend.position = 'none')+
+    scale_y_continuous(limits = c(0,1.01),expand = c(0,0))
 grid.arrange(p1,p2)
 ```
 
 # Comparison with before
+
+## all years
 ```{r comp, fig.width=15}
 repo <- "https://github.com/iml-mackerel/0.0_model/blob/master/"
 
@@ -257,7 +263,7 @@ ggplot(maa.comp,aes(x=as.numeric(year),y=value,col=variable))+
 
 ```
 
-# Fill and smooth 
+# Fill and smooth (not used)
 
 Fit Noel Cadigan's state-space model for waa.
 1) filter out noise.
@@ -265,7 +271,7 @@ Fit Noel Cadigan's state-space model for waa.
 
 Fits an AR1 process in 3 directions (age, year, cohort). Available in catchR package.
 
-Would need logit transformation to be usefull.. not log
+Would need logit transformation to be usefull.. not log.
 Unsure this makes much sense because annual model output.
 Will not use this
 
@@ -283,13 +289,15 @@ maaf$cv <- 0.6  # doesn't work with the mini numbers estimated
 
 maa.fit <- armatrix.fit(year=maaf$year,age=maaf$age,x=maaf$fit,cv=maaf$cv,shrink.cv = 0)
 maa.fit  # convergence ok
+
+maa.fit$output$pred_exp <- pmin(maa.fit$output$pred_exp,1)
 ```
 
 ## Plots {.tabset}
 
 ### waa
 ```{r maa_smoothed, message = F, fig.height = 3,fig.width = 5,results = 'hide',message=FALSE}
-armatrix.waa(maa.fit)+scale_color_viridis_d()
+armatrix.waa(maa.fit,ylab='Proportion mature')+scale_color_viridis_d()
 ```
 
 # Fill and smooth simple
@@ -298,7 +306,7 @@ armatrix.waa(maa.fit)+scale_color_viridis_d()
 maas <- maa[,c('year','age','fit')]
 maas$year <- as.numeric(maas$year)
 
-# set to one for older ages
+# set to one for older ages (once 1 reached cannot decrease anymore)
 maas[maas$age>4,'fit'] <- 1
 
 # add early years
@@ -307,10 +315,59 @@ toadd <- cbind(year=rep(1968:(min(maas$year)-1),each=length(unique(maas$age))),
                av[rep(seq(nrow(av)),6),])
 maas <- rbind(toadd,maas)
 
+# remove years with insufficeint data
+thres <- 30
+toremove <- ddply(prop.mat[prop.mat$age %in% 1:2,],c('year'),summarise,toremove=ifelse(sum(n)<30,T,F))
+maas[maas$year %in% toremove[toremove$toremove,'year'],'fit'] <- NA
+
 ggplot(maas,aes(x=as.numeric(year),y=fit))+
     geom_point(aes(col=as.factor(age)))+
     geom_line(aes(col=as.factor(age)),size=1)+
     labs(x='Year',y='Proportion mature',col='Age')+
     scale_color_viridis_d()+
     theme(legend.position = 'none')
+```
+
+## compare with 2020 smoothed
+```{r compsmooth, fig.width=6,fig.height=6}
+setwd('..')
+y <- 2020
+load(paste0('00.0_model/Rdata/',y,'/fit.Rdata'))
+mo <- fit$data$propMat
+mo <- melt(mo,varnames = c('year','age'),value.name = 'fit')
+mo$source <- 'OLD'
+
+source(paste0('00.0_model/R/smoothmatrix.R'))
+sm <- smoothmatrix(dcast(maas,year~age,value.var = 'fit')[,-1],smooth = 0.5)
+sm[sm>1] <- 1
+sm[sm<0] <- 0
+sm$year <- min(maas$year):max(maas$year)
+sm <- melt(sm,id='year', variable.name = 'age',value.name = 'fit')
+sm$source <- 'NEW'
+
+sms <- rbind(mo,sm)
+sms$age <- as.numeric(as.character(sms$age))
+ggplot(sms,aes(x=year,y=fit,col=as.factor(age)))+
+    geom_line(size=1)+
+    facet_wrap(source~.,ncol=1)+
+    labs(x='Year',y='Proportion mature',col='Age')+
+    scale_y_continuous(limits=c(0,1.01),expand=c(0,0))+
+    scale_x_continuous(expand = c(0,0))+
+    scale_color_viridis_d()
+```
+
+# Save results
+```{r waa_result, message = F}
+s <- dcast(sm,year~age,value.var = 'fit')
+s[,2:ncol(s)] <- round(s[,2:ncol(s)] ,3)
+write.csv(s, file=paste0('csv/maa_',Sys.Date(),'_base_smooth0.5.csv'),row.names = FALSE)
+
+p <- ggplot(sms[sms$source=='NEW',],aes(x=year,y=fit,col=as.factor(age)))+
+    geom_line(size=1)+
+    labs(x='Year',y='Proportion mature',col='Age')+
+    scale_y_continuous(limits=c(0,1.01),expand=c(0,0))+
+    scale_x_continuous(expand = c(0,0))+
+    scale_color_viridis_d()
+ggsave(filename = paste0('img/maa',Sys.Date(),'_base_smooth0.5.png'),plot = p,units = 'cm',height = 8,width = 14)
+
 ```
