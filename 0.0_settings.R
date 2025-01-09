@@ -15,8 +15,8 @@ if('CCAM' %in% install.this)  devtools::install_github("elisvb/CCAM")
 dummy <- lapply(git.packages, require, character.only = TRUE)
 
 ##### my directories ################################################################################
-dir.dat  <- 'data/'
-dir.Rdata <- 'Rdata/'
+dir.dat  <- '../../data/'
+dir.Rdata <- '../../Rdata/'
 
 ##### source R directory  ################################################################################
 invisible(sapply(list.files(pattern="[.]R$", path="R/", full.names=TRUE), source))
@@ -26,4 +26,4 @@ theme_set(theme_mackerel())             # theme_mackerel from catchR
 update_geom_defaults("line", list(size = 1))  # no idea why somethimes I get fat lines otherwise
 
 ##### passwords databases #############################################################################
-source('passwords.R')
+source('../../passwords.R')

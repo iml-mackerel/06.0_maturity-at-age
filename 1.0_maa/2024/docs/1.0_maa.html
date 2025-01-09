@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2024-12-17" />
+
+<title>Maturity-at-age</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Mackerel Maturity at age</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="0.0_settings.html">
+    <span class="fa fa-cogs"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="1.0_maa.html">Read and analyze</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Maturity-at-age</h1>
+<h4 class="date">2024-12-17</h4>
+
+</div>
+
+
+<div id="set-up" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> SET-UP</h1>
+<pre class="r"><code>source(&#39;../../0.0_settings.R&#39;)</code></pre>
+</div>
+<div id="input-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Input data</h1>
+<div id="read" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Read</h2>
+<pre class="r"><code>new &lt;- T
+if(new){
+    bio &lt;- get.bio(species=&#39;maquereau&#39;,user=imlp.user,password=imlp.pass)
+    f &lt;- paste0(&#39;../../Rdata/bio_&#39;,Sys.Date(),&#39;.Rdata&#39;)
+    save(bio,file=f)
+}else{
+    df &lt;- file.info(list.files(&quot;../../Rdata/&quot;, full.names = T,pattern=&quot;bio_&quot;))
+    f &lt;- rownames(df)[which.max(df$mtime)]
+    load(f)
+}
+print(f)
+## [1] &quot;../../Rdata/bio_2024-12-17.Rdata&quot;
+maa.gear &lt;- read.table(paste0(dir.dat,&#39;maa_group_gear.txt&#39;),header=T)
+maa.region &lt;- read.table(paste0(dir.dat,&#39;maa_group_region.txt&#39;),header=T)</code></pre>
+</div>
+<div id="clean" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Clean</h2>
+<pre class="r"><code># subset
+bio.mat &lt;- bio[,c(&#39;year&#39;,&#39;nafo&#39;,&#39;gear&#39;,&#39;sex&#39;,&#39;month&#39;,&#39;length.frozen&#39;,&#39;agef&#39;,&#39;matur&#39;)]
+names(bio.mat)[c(6:7)] &lt;- c(&#39;length&#39;,&#39;age&#39;)
+nrow(bio.mat)
+## [1] 146719
+
+# what months?
+bio.mat &lt;- bio.mat[bio.mat$month %in% c(6:7),]   # was done before
+# bio.mat &lt;- bio.mat[bio.mat$month %in% c(5:11),]    # less smooth results, depsite larger amount of data and small effect of month on maa
+
+# remove NAs
+bio.mat &lt;- bio.mat[!is.na(bio.mat$matur) &amp; !is.na(bio.mat$age) &amp; !is.na(bio.mat$year),]
+nrow(bio.mat)
+## [1] 46991
+
+# remove fish with ages that cannot be trusted (wrong length: see 3.0_caa))
+bio.mat &lt;- bio.mat[bio.mat$age&lt;18,]      
+bio.mat &lt;- ddply(bio.mat,c(&#39;age&#39;),transform,outlier=outlier(length,coef=3))  
+bio.mat[(bio.mat$age==0 &amp; bio.mat$length&gt;300),&#39;outlier&#39;] &lt;- TRUE     
+bio.mat[is.na(bio.mat$outlier),&#39;outlier&#39;] &lt;- FALSE
+bio.mat &lt;- bio.mat[bio.mat$outlier==FALSE,]
+bio.mat$outlier &lt;- NULL
+nrow(bio.mat)
+## [1] 46956
+
+### transform
+# group gears and regions for sens test
+bio.mat$region &lt;- maa.region[match(bio.mat$nafo,maa.region$nafo),&#39;region&#39;]
+table(bio.mat$region,useNA = &#39;always&#39;)
+## 
+##   eNL  nGSL  sGSL   sNL    SS   wNL  &lt;NA&gt; 
+##   794   794 30893   150 13659   666     0
+
+bio.mat$gear.group &lt;- maa.gear[match(bio.mat$gear,maa.gear$gear.cat),&#39;gear.group&#39;]
+table(bio.mat$gear.group,useNA = &#39;always&#39;)
+## 
+##                Gillnets                   Lines                    Misc Seines_Nets_Traps_Weirs                    &lt;NA&gt; 
+##                   26170                    7560                     542                   12684                       0
+
+# age: 10 is plus group
+bio.mat[bio.mat$age&gt;10,&#39;age&#39;] &lt;- 10
+
+# mature vs immature
+bio.mat$mat &lt;- ifelse(bio.mat$matur&lt;3,0,1) # based on maturity stage, not sex (F, I, M)
+
+# correct maturity stage of age 0 fish. If caught in months 8-12 can impossibly be mature because only some months old.
+bio.mat[bio.mat$mat==1 &amp; bio.mat$age==0 &amp; bio.mat$month&gt;7,&#39;mat&#39;] &lt;- 0
+
+# proportion mature at age
+prop.mat &lt;- ddply(bio.mat,c(&#39;year&#39;,&#39;age&#39;),summarise,
+               prop.immat=length(mat[mat==0])/length(mat),
+               prop.mat=length(mat[mat==1])/length(mat),
+               n=length(mat))</code></pre>
+</div>
+<div id="tables" class="section level2 tabset" number="2.3">
+<h2 class="tabset"><span class="header-section-number">2.3</span>
+Tables</h2>
+<div id="numbers" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> numbers</h3>
+<pre class="r"><code>kable(t(table(bio.mat$mat,bio.mat$year)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">0</th>
+<th align="right">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1973</td>
+<td align="right">1338</td>
+<td align="right">92</td>
+</tr>
+<tr class="even">
+<td align="left">1974</td>
+<td align="right">103</td>
+<td align="right">592</td>
+</tr>
+<tr class="odd">
+<td align="left">1975</td>
+<td align="right">110</td>
+<td align="right">813</td>
+</tr>
+<tr class="even">
+<td align="left">1976</td>
+<td align="right">104</td>
+<td align="right">1436</td>
+</tr>
+<tr class="odd">
+<td align="left">1977</td>
+<td align="right">455</td>
+<td align="right">2160</td>
+</tr>
+<tr class="even">
+<td align="left">1978</td>
+<td align="right">76</td>
+<td align="right">1419</td>
+</tr>
+<tr class="odd">
+<td align="left">1979</td>
+<td align="right">175</td>
+<td align="right">1749</td>
+</tr>
+<tr class="even">
+<td align="left">1980</td>
+<td align="right">9</td>
+<td align="right">1465</td>
+</tr>
+<tr class="odd">
+<td align="left">1981</td>
+<td align="right">12</td>
+<td align="right">1180</td>
+</tr>
+<tr class="even">
+<td align="left">1982</td>
+<td align="right">67</td>
+<td align="right">883</td>
+</tr>
+<tr class="odd">
+<td align="left">1983</td>
+<td align="right">51</td>
+<td align="right">431</td>
+</tr>
+<tr class="even">
+<td align="left">1984</td>
+<td align="right">96</td>
+<td align="right">987</td>
+</tr>
+<tr class="odd">
+<td align="left">1985</td>
+<td align="right">38</td>
+<td align="right">1030</td>
+</tr>
+<tr class="even">
+<td align="left">1986</td>
+<td align="right">0</td>
+<td align="right">581</td>
+</tr>
+<tr class="odd">
+<td align="left">1987</td>
+<td align="right">28</td>
+<td align="right">681</td>
+</tr>
+<tr class="even">
+<td align="left">1988</td>
+<td align="right">1</td>
+<td align="right">562</td>
+</tr>
+<tr class="odd">
+<td align="left">1989</td>
+<td align="right">42</td>
+<td align="right">786</td>
+</tr>
+<tr class="even">
+<td align="left">1990</td>
+<td align="right">2</td>
+<td align="right">658</td>
+</tr>
+<tr class="odd">
+<td align="left">1991</td>
+<td align="right">21</td>
+<td align="right">590</td>
+</tr>
+<tr class="even">
+<td align="left">1992</td>
+<td align="right">25</td>
+<td align="right">457</td>
+</tr>
+<tr class="odd">
+<td align="left">1993</td>
+<td align="right">1</td>
+<td align="right">711</td>
+</tr>
+<tr class="even">
+<td align="left">1994</td>
+<td align="right">11</td>
+<td align="right">327</td>
+</tr>
+<tr class="odd">
+<td align="left">1995</td>
+<td align="right">78</td>
+<td align="right">805</td>
+</tr>
+<tr class="even">
+<td align="left">1996</td>
+<td align="right">63</td>
+<td align="right">655</td>
+</tr>
+<tr class="odd">
+<td align="left">1997</td>
+<td align="right">47</td>
+<td align="right">640</td>
+</tr>
+<tr class="even">
+<td align="left">1998</td>
+<td align="right">49</td>
+<td align="right">976</td>
+</tr>
+<tr class="odd">
+<td align="left">1999</td>
+<td align="right">104</td>
+<td align="right">1004</td>
+</tr>
+<tr class="even">
+<td align="left">2000</td>
+<td align="right">103</td>
+<td align="right">825</td>
+</tr>
+<tr class="odd">
+<td align="left">2001</td>
+<td align="right">34</td>
+<td align="right">753</td>
+</tr>
+<tr class="even">
+<td align="left">2002</td>
+<td align="right">37</td>
+<td align="right">741</td>
+</tr>
+<tr class="odd">
+<td align="left">2003</td>
+<td align="right">6</td>
+<td align="right">712</td>
+</tr>
+<tr class="even">
+<td align="left">2004</td>
+<td align="right">92</td>
+<td align="right">963</td>
+</tr>
+<tr class="odd">
+<td align="left">2005</td>
+<td align="right">138</td>
+<td align="right">815</td>
+</tr>
+<tr class="even">
+<td align="left">2006</td>
+<td align="right">70</td>
+<td align="right">713</td>
+</tr>
+<tr class="odd">
+<td align="left">2007</td>
+<td align="right">20</td>
+<td align="right">768</td>
+</tr>
+<tr class="even">
+<td align="left">2008</td>
+<td align="right">102</td>
+<td align="right">880</td>
+</tr>
+<tr class="odd">
+<td align="left">2009</td>
+<td align="right">45</td>
+<td align="right">567</td>
+</tr>
+<tr class="even">
+<td align="left">2010</td>
+<td align="right">70</td>
+<td align="right">498</td>
+</tr>
+<tr class="odd">
+<td align="left">2011</td>
+<td align="right">28</td>
+<td align="right">567</td>
+</tr>
+<tr class="even">
+<td align="left">2012</td>
+<td align="right">2</td>
+<td align="right">384</td>
+</tr>
+<tr class="odd">
+<td align="left">2013</td>
+<td align="right">11</td>
+<td align="right">416</td>
+</tr>
+<tr class="even">
+<td align="left">2014</td>
+<td align="right">2</td>
+<td align="right">424</td>
+</tr>
+<tr class="odd">
+<td align="left">2015</td>
+<td align="right">68</td>
+<td align="right">764</td>
+</tr>
+<tr class="even">
+<td align="left">2016</td>
+<td align="right">84</td>
+<td align="right">699</td>
+</tr>
+<tr class="odd">
+<td align="left">2017</td>
+<td align="right">144</td>
+<td align="right">741</td>
+</tr>
+<tr class="even">
+<td align="left">2018</td>
+<td align="right">109</td>
+<td align="right">976</td>
+</tr>
+<tr class="odd">
+<td align="left">2019</td>
+<td align="right">298</td>
+<td align="right">997</td>
+</tr>
+<tr class="even">
+<td align="left">2020</td>
+<td align="right">147</td>
+<td align="right">669</td>
+</tr>
+<tr class="odd">
+<td align="left">2021</td>
+<td align="right">86</td>
+<td align="right">823</td>
+</tr>
+<tr class="even">
+<td align="left">2022</td>
+<td align="right">157</td>
+<td align="right">462</td>
+</tr>
+<tr class="odd">
+<td align="left">2023</td>
+<td align="right">234</td>
+<td align="right">961</td>
+</tr>
+<tr class="even">
+<td align="left">2024</td>
+<td align="right">119</td>
+<td align="right">856</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="plots" class="section level2 tabset" number="2.4">
+<h2 class="tabset"><span class="header-section-number">2.4</span>
+Plots</h2>
+<div id="age-vs-maturity-curve" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> age vs maturity
+curve</h3>
+<pre class="r"><code>ggplot(prop.mat,aes(x=age,y=prop.mat))+
+    geom_line(size=1)+
+    geom_point()+
+    geom_text(aes(label=n),size=3,hjust=0,vjust=0)+
+    facet_wrap(~year)+
+    scale_color_viridis_c()</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20age_mat-1.png" width="1728" style="display: block; margin: auto;" /></p>
+</div>
+<div id="age-vs-maturity-tile" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> age vs maturity
+tile</h3>
+<pre class="r"><code>ggplot(prop.mat,aes(x=year,y=age,fill=prop.mat))+
+    geom_tile()+
+    geom_text(aes(label=round(prop.mat,2)),size=2)+
+    scale_fill_viridis_c()+
+    scale_x_continuous(expand=c(0,0))+
+    scale_y_continuous(expand=c(0,0))</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20age_mat_tile-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="age-vs-maturity-n" class="section level3" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> age vs maturity
+n</h3>
+<pre class="r"><code>ggplot(prop.mat,aes(x=year,y=age,fill=n))+
+    geom_tile()+
+    geom_text(aes(label=n),size=2)+
+    scale_fill_viridis_c(direction = -1)+
+    scale_x_continuous(expand=c(0,0))+
+    scale_y_continuous(expand=c(0,0))</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20age_mat_tilen-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="calculations" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Calculations</h1>
+<pre class="r"><code># exclude 1973
+bio.mat &lt;- bio.mat[bio.mat$year!=1973,]
+prop.mat &lt;- prop.mat[prop.mat$year!=1973,]
+
+# run models
+mods &lt;- lapply(unique(bio.mat$year), function(x) glm(mat~age,data=bio.mat[bio.mat$year==x,],family=binomial(logit))) # warning not a problem
+
+# predictions 
+df &lt;- data.frame(age=seq(0,10,0.1))
+preds &lt;- lapply(mods, function(x) cbind(df,predict(x,df,type=&quot;response&quot;,se.fit=TRUE)))           # predictions
+preds &lt;- lapply(preds, function(x) cbind(x, pup= x$fit+1.96*x$se.fit))     # add upper bound
+preds &lt;- lapply(preds, function(x) cbind(x, plow= x$fit-1.96*x$se.fit))    # add lower bound
+
+names(preds) &lt;- unique(bio.mat$year)
+preds &lt;- bind_rows(preds,.id=&#39;year&#39;)
+
+maa &lt;- preds[preds$age %in% 1:10,]
+rownames(maa) &lt;- 1:nrow(maa)
+maa$fit &lt;- round(maa$fit,2)
+
+# test:
+# mod &lt;- glm(mat~age+as.factor(year)+as.factor(gear.group)+as.factor(region)+month,data=bio.mat,family=binomial) # though there are interactions
+# df2 &lt;- data.frame(expand.grid(age=seq(0,10,0.1),year=as.factor(unique(bio.mat$year))),month=6,region=&#39;sGSL&#39;,gear.group=&#39;Lines&#39;)
+# preds2 &lt;- cbind(df2,predict(mod,df2,type=&quot;response&quot;,se.fit=TRUE))          # predictions
+# preds2$pup &lt;- preds2$fit+1.96*preds2$se.fit     # add upper bound
+# preds2$plow &lt;- preds2$fit-1.96*preds2$se.fit    # add lower bound
+</code></pre>
+<div id="plots-1" class="section level2 tabset" number="3.1">
+<h2 class="tabset"><span class="header-section-number">3.1</span>
+Plots</h2>
+<div id="fit" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> fit</h3>
+<pre class="r"><code>ggplot(preds)+
+    geom_rug(data=bio.mat[bio.mat$mat==0,],aes(x=age,y=mat),sides=&#39;b&#39;, position = &quot;jitter&quot;,col=&#39;grey&#39;) +
+    geom_rug(data=bio.mat[bio.mat$mat==1,],aes(x=age,y=mat),sides=&#39;t&#39;, position = &quot;jitter&quot;,col=&#39;grey&#39;) +
+    geom_ribbon(aes(ymin=plow,ymax=pup,x=age),fill=&#39;red&#39;,alpha=0.5)+
+    geom_line(aes(x=age,y=fit),col=&#39;red&#39;,size=1)+
+    geom_point(data=prop.mat,aes(x=age,y=prop.mat))+
+    scale_y_continuous(limits=c(0,1),expand=c(0,0))+
+    labs(x=&#39;Age&#39;,y=&#39;Proportion mature&#39;)+
+    facet_wrap(~year)</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20pred-1.png" width="1728" style="display: block; margin: auto;" /></p>
+</div>
+<div id="fit-2-last-years" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> fit 2 last
+years</h3>
+<pre class="r"><code>ggplot(preds %&gt;%  filter(year %in% (my.year-1) : my.year))+
+    geom_rug(data=bio.mat[bio.mat$mat==0 &amp; bio.mat$year %in% (my.year-1) : my.year,],aes(x=age,y=mat),sides=&#39;b&#39;, position = &quot;jitter&quot;,col=&#39;grey&#39;) +
+    geom_rug(data=bio.mat[bio.mat$mat==1 &amp;bio.mat$year %in% (my.year-1) : my.year,],aes(x=age,y=mat),sides=&#39;t&#39;, position = &quot;jitter&quot;,col=&#39;grey&#39;) +
+    geom_ribbon(aes(ymin=plow,ymax=pup,x=age),fill=&#39;red&#39;,alpha=0.5)+
+    geom_line(aes(x=age,y=fit),col=&#39;red&#39;,size=1)+
+    geom_point(data=prop.mat  %&gt;%  filter(year %in% (my.year-1) : my.year),aes(x=age,y=prop.mat))+
+    scale_y_continuous(limits=c(0,1),expand=c(0,0))+
+    labs(x=&#39;Âge | Age&#39;,y=&#39;Proportion mature&#39;)+
+    scale_x_continuous(breaks=1:10)+
+    facet_wrap(~year)</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20pred2-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="maa" class="section level3" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> maa</h3>
+<pre class="r"><code>m1&lt;- ggplot(maa,aes(x=as.numeric(year),y=fit))+
+    geom_point(aes(col=as.factor(age)))+
+    geom_line(aes(col=as.factor(age)),size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;)+
+    scale_color_viridis_d()+
+    theme(legend.position = &#39;none&#39;)
+
+m1+labs(x=&#39;Année | Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Âge | Age&#39;)</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20maa-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(filename = paste0(&#39;../../img/&#39;,my.year,&#39;/mat&#39;,my.year,&#39;_glmBI.png&#39;),units = &#39;cm&#39;,height = 8,width = 14)
+</code></pre>
+</div>
+<div id="maa-ci" class="section level3" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> maa ci</h3>
+<pre class="r"><code>ggplot(maa,aes(x=as.numeric(year),y=fit))+
+    geom_ribbon(aes(ymin=pmax(0,plow),ymax=pmin(1,pup),fill=as.factor(age)),alpha=0.5)+
+    geom_point(aes(col=as.factor(age)))+
+    geom_line(aes(col=as.factor(age)),size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;)+
+    scale_color_viridis_d()+
+    theme(legend.position = &#39;none&#39;)</code></pre>
+<p><img src="1.0_maa_files/figure-html/plot%20maaci-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="sensitivity-age-0" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Sensitivity: age 0</h1>
+<p>What if there were actually had observations of age 0 (not selected
+by fishery) that are immature? Conclusion: no significant
+difference.</p>
+<pre class="r"><code># add age 0
+n &lt;- 100 # number of new immature fish each year
+new &lt;- data.frame(year=unique(bio.mat$year),age=0,mat=0)  # all new age 0 for all years
+bio.matsupp &lt;- rbind(bio.mat[,which(names(bio.mat) %in% names(new))],new[rep(seq_len(nrow(new)), n), ])
+
+# run models
+modssupp &lt;- lapply(unique(bio.matsupp$year), function(x) glm(mat~age,data=bio.matsupp[bio.matsupp$year==x,],family=binomial))
+
+# predictions 
+predssupp &lt;- lapply(modssupp, function(x) cbind(df,predict(x,df,type=&quot;response&quot;,se.fit=TRUE)))           # predictions
+predssupp &lt;- lapply(predssupp, function(x) cbind(x, pup= x$fit+1.96*x$se.fit))     # add upper bound
+predssupp &lt;- lapply(predssupp, function(x) cbind(x, plow= x$fit-1.96*x$se.fit))    # add lower bound
+
+names(predssupp) &lt;- unique(bio.matsupp$year)
+predssupp &lt;- bind_rows(predssupp,.id=&#39;year&#39;)
+
+maas &lt;- predssupp[predssupp$age %in% 1:10,]
+rownames(maas) &lt;- 1:nrow(maas)
+
+p1 &lt;- ggplot(maas,aes(x=as.numeric(year),y=fit))+
+    geom_ribbon(aes(ymin=plow,ymax=pup,fill=as.factor(age)),alpha=0.5)+
+    geom_point(aes(col=as.factor(age)))+
+    geom_line(aes(col=as.factor(age)),size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;,title=&#39;Base&#39;)+
+    scale_color_viridis_d()+
+    theme(legend.position = &#39;none&#39;)+
+    scale_y_continuous(limits = c(0,1.01),expand = c(0,0))
+p2 &lt;- ggplot(maas,aes(x=as.numeric(year),y=fit))+
+    geom_ribbon(aes(ymin=plow,ymax=pup,fill=as.factor(age)),alpha=0.5)+
+    geom_point(aes(col=as.factor(age)))+
+    geom_line(aes(col=as.factor(age)),size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;,title=&#39;Padded with age 0&#39;)+
+    scale_color_viridis_d()+
+    theme(legend.position = &#39;none&#39;)+
+    scale_y_continuous(limits = c(0,1.01),expand = c(0,0))
+grid.arrange(p1,p2)</code></pre>
+<p><img src="1.0_maa_files/figure-html/sens_padd0-1.png" width="864" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comparison-with-before" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Comparison with
+before</h1>
+<div id="all-years" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> all years</h2>
+<pre class="r"><code>repo &lt;- &quot;https://github.com/iml-mackerel/0.0_model/blob/master/&quot;
+
+ys &lt;- c(2016,2018,2020)
+maa.hist &lt;- lapply(ys, function(x) read.ices(url(paste0(repo,&#39;data/&#39;,x,&#39;/mo.dat&#39;,&quot;?raw=true&quot;))))
+names(maa.hist) &lt;- ys 
+
+maam &lt;- lapply(names(maa.hist), function(x) reshape2::melt(as.matrix(maa.hist[[x]]),varnames=c(&#39;year&#39;,&#39;age&#39;),value.name=x))
+maa.comp &lt;- Reduce(function(x, y) merge(x, y, all=TRUE), maam)
+
+maa.new &lt;- maa[,c(&#39;year&#39;,&#39;age&#39;,&#39;fit&#39;)]
+names(maa.new)[3] &lt;- &#39;2022&#39;
+
+maa.comp &lt;- merge(maa.comp,maa.new,all=TRUE)
+maa.comp &lt;- melt(maa.comp,id=c(&#39;year&#39;,&#39;age&#39;))
+ggplot(maa.comp,aes(x=as.numeric(year),y=value,col=variable))+
+    geom_line(size=1)+
+    facet_wrap(~age,scale=&#39;free_y&#39;)+
+    labs(x=&#39;Year&#39;, y=&#39;Proportion mature&#39;,col=&#39;Assessment year&#39;)</code></pre>
+<p><img src="1.0_maa_files/figure-html/comp-1.png" width="1440" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="fill-and-smooth-simple" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Fill and smooth
+simple</h1>
+<pre class="r"><code>maas &lt;- maa[,c(&#39;year&#39;,&#39;age&#39;,&#39;fit&#39;)]
+maas$year &lt;- as.numeric(maas$year)
+
+# set to one for older ages (once 1 reached cannot decrease anymore)
+maas[maas$age&gt;4,&#39;fit&#39;] &lt;- 1
+
+# add early years
+av &lt;- ddply(maas[maas$year %in% 1974:1979,],c(&#39;age&#39;),summarise,fit=mean(fit))
+toadd &lt;- cbind(year=rep(1968:(min(maas$year)-1),each=length(unique(maas$age))),
+               av[rep(seq(nrow(av)),6),])
+maas &lt;- rbind(toadd,maas)
+
+# remove years with insufficeint data
+thres &lt;- 30
+toremove &lt;- ddply(prop.mat[prop.mat$age %in% 1:2,],c(&#39;year&#39;),summarise,toremove=ifelse(sum(n)&lt;30,T,F))
+maas[maas$year %in% toremove[toremove$toremove,&#39;year&#39;],&#39;fit&#39;] &lt;- NA
+
+ggplot(maas,aes(x=as.numeric(year),y=fit))+
+    geom_point(aes(col=as.factor(age)))+
+    geom_line(aes(col=as.factor(age)),size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;)+
+    scale_color_viridis_d()+
+    theme(legend.position = &#39;none&#39;)</code></pre>
+<p><img src="1.0_maa_files/figure-html/maa_smooth-1.png" width="864" style="display: block; margin: auto;" /></p>
+<div id="compare-with-2020-smoothed" class="section level2"
+number="6.1">
+<h2><span class="header-section-number">6.1</span> compare with 2020
+smoothed</h2>
+<pre class="r"><code>
+y &lt;- 2020
+load(paste0(&#39;../../../00.0_model/Rdata/&#39;,y,&#39;/fit.Rdata&#39;))
+mo &lt;- fit$data$propMat
+mo &lt;- melt(mo,varnames = c(&#39;year&#39;,&#39;age&#39;),value.name = &#39;fit&#39;)
+mo$source &lt;- &#39;OLD&#39;
+
+source(paste0(&#39;../../../00.0_model/R/smoothmatrix.R&#39;))
+sm &lt;- smoothmatrix(dcast(maas,year~age,value.var = &#39;fit&#39;)[,-1],smooth = 0.5)
+sm[sm&gt;1] &lt;- 1
+sm[sm&lt;0] &lt;- 0
+sm$year &lt;- min(maas$year):max(maas$year)
+sm &lt;- melt(sm,id=&#39;year&#39;, variable.name = &#39;age&#39;,value.name = &#39;fit&#39;)
+sm$source &lt;- &#39;NEW&#39;
+
+sms &lt;- rbind(mo,sm)
+sms$age &lt;- as.numeric(as.character(sms$age))
+ggplot(sms,aes(x=year,y=fit,col=as.factor(age)))+
+    geom_line(size=1)+
+    facet_wrap(source~.,ncol=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;)+
+    scale_y_continuous(limits=c(0,1.01),expand=c(0,0))+
+    scale_x_continuous(expand = c(0,0))+
+    scale_color_viridis_d()</code></pre>
+<p><img src="1.0_maa_files/figure-html/compsmooth-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="save-results" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Save results</h1>
+<pre class="r"><code>s &lt;- dcast(sm,year~age,value.var = &#39;fit&#39;)
+s[,2:ncol(s)] &lt;- round(s[,2:ncol(s)] ,3)
+write.csv(s, file=paste0(&#39;../../csv/&#39;,my.year,&#39;/maa&#39;,my.year,&#39;_base_smooth0.5.csv&#39;),row.names = FALSE)
+
+p &lt;- ggplot(sms[sms$source==&#39;NEW&#39;,],aes(x=year,y=fit,col=as.factor(age)))+
+    geom_line(size=1)+
+    labs(x=&#39;Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Age&#39;)+
+    scale_y_continuous(limits=c(0,1.01),expand=c(0,0))+
+    scale_x_continuous(expand = c(0,0))+
+    scale_color_viridis_d()
+ggsave(filename = paste0(&#39;../../img/&#39;,my.year,&#39;/maa&#39;,my.year,&#39;_base_smooth0.5.png&#39;),plot = p,units = &#39;cm&#39;,height = 8,width = 14)
+
+p+ labs(x=&#39;Année | Year&#39;,y=&#39;Proportion mature&#39;,col=&#39;Âge | Age&#39;)</code></pre>
+<p><img src="1.0_maa_files/figure-html/maa_result-1.png" width="864" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(filename = paste0(&#39;../../img/&#39;,my.year,&#39;/maa&#39;,my.year,&#39;_base_smooth0.5BI.png&#39;),units = &#39;cm&#39;,height = 8,width = 14)</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
