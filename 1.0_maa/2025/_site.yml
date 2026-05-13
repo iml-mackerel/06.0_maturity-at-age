@@ -1,0 +1,13 @@
+name: "Mackerel Maturity at age"
+output_dir: "docs"
+navbar:
+  title: "Mackerel Maturity at age"
+  left:
+    - text: "Read and analyze"
+      href: 1.0_maa.html
+
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    css: styles.css
